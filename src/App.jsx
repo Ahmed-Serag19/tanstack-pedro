@@ -1,30 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import "./App.css";
-const url = "https://jsonplaceholder.typicode.com/posts";
-
-const fetchPosts = async () => {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Error fetching posts");
-
-  const data = await response.json();
-  console.log(data);
-  return data;
-};
+import Posts from "./Posts";
 
 function App() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["posts"],
-    queryFn: fetchPosts,
-  });
-  if (isLoading) return <p>Loading...</p>;
+  const [toggled, setToggled] = useState(false);
 
-  if (error) return <p>Error occured: {error.message}</p>;
+  const HandleSetToggled = () => {
+    setToggled((prev) => !prev);
+  };
 
   return (
     <>
-      {data.map((post) => (
-        <p key={post.id}>{post.title}</p>
-      ))}
+      <button onClick={HandleSetToggled}>Toggle Posts</button>
+      {toggled && <Posts />}
     </>
   );
 }
